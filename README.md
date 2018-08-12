@@ -37,7 +37,7 @@ SHINoALICE_Colosseum
 ・[/recog.py]内のスプレッドシート連携部分でJSONファイルやシート名を記入して完了。  
 
 ・起動方法  
-'$python2 recog.py'
+    $python2 recog.py
 
 ## LICENCE
 .For individual use okay  
