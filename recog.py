@@ -18,6 +18,8 @@ result_a   = [''] * 5
 result_b   = [''] * 5
 im_recog_a = [''] * 5
 im_recog_b = [''] * 5
+im_recog_m = [''] * 5
+name_a     = [''] * 5
 # 最終的なリスト変数
 top_a = [''] * 2
 top_b = [''] * 2
@@ -62,7 +64,7 @@ def record():
 		ret, th2 = cv2.threshold(gray, t, 255, cv2.THRESH_BINARY)
 		cv2.imwrite("./imgs/gray/100%d.png" %(i), th2)
 
-	# 神魔武器読み取り
+	""" 神魔武器読み込み """
 	t = 80
 	img = cv2.imread('./img/108.png')
 	gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
@@ -72,7 +74,7 @@ def record():
 	url_img = ('./imgs/gray/1009.png')
 	img = Image.open(url_img)
 
-	""" トリミング """
+	# トリミング
 	# 今日の神魔
 	im_recog_a[0] = img.crop((254, 405 , 290 , 442))
 	im_recog_a[1] = img.crop((288, 405 , 326 , 442))
@@ -81,7 +83,7 @@ def record():
 	im_recog_b[1] = img.crop((289, 879 , 326 , 917))
 	im_recog_b[2] = img.crop((323, 879 , 362 , 917))
 
-	""" トリミングした画像の保存 """
+	# トリミングした画像の保存
 	for i in range(0,3):
 		im_recog_a[i].save('./imgs/sinma/1%d.png' % (i), quality = 95)
 		im_recog_b[i].save('./imgs/sinma/2%d.png' % (i), quality = 95)
@@ -114,12 +116,12 @@ def record():
 					z =+ 1
 	print ("Shinma recognition complete!")
 
-	# TOP & 神魔カウント
+	""" TOP & 神魔カウント """
 	for x in range(0,2):
 		url_img = ('./imgs/gray/100%d.png' %(x+7))
 		img = Image.open(url_img)
 
-		""" トリミング """
+		# トリミング
 		# TOP イノチとコンボ
 		if x == 0:
 			im_recog_a[0] = img.crop((114, 378 , 295 , 410))
@@ -132,12 +134,12 @@ def record():
 			im_recog_b[0] = img.crop((535, 350 , 600 , 380))
 			im_recog_b[1] = img.crop((535, 825 , 600 , 855))
 
-		""" トリミングした画像の保存 """
+		# トリミングした画像の保存
 		for i in range(0,2):
 			im_recog_a[i].save('imgs/score/3%d.png' % (i), quality = 95)
 			im_recog_b[i].save('imgs/score/4%d.png' % (i), quality = 95)
 
-		""" 画像から数字を認識 """
+		# 画像から数字を認識
 		for i in range(0,2):
 			result_a[i] = pytesseract.image_to_string(im_recog_a[i])
 			result_b[i] = pytesseract.image_to_string(im_recog_b[i])
@@ -155,7 +157,7 @@ def record():
 			sin_b = copy.deepcopy(result_b)
 			prin_sin(sin_a,sin_b)
 
-	""" スプレッドシートに記録 """
+	""" スプレッドシートに記録 [イノチ、コンボ、神魔武器、神魔カウント] """
 	for top in range(1,3):
 		if top == 1:
 			cell_list_a = wks.range('C7:C8')
@@ -188,27 +190,58 @@ def record():
 		img = Image.open(url_img)
 
 		""" トリミング　"""
+		# 味方の貢献度
 		im_recog_a[0] = img.crop((160, 280 , 400 , 315))
 		im_recog_a[1] = img.crop((160, 400 , 400 , 435))
 		im_recog_a[2] = img.crop((160, 520 , 400 , 555))
 		im_recog_a[3] = img.crop((160, 640 , 400 , 675))
 		im_recog_a[4] = img.crop((160, 760 , 400 , 795))
-
+		# 相手の貢献度
 		im_recog_b[0] = img.crop((425, 280 , 660 , 315))
 		im_recog_b[1] = img.crop((425, 400 , 660 , 435))
 		im_recog_b[2] = img.crop((425, 520 , 660 , 555))
 		im_recog_b[3] = img.crop((425, 640 , 660 , 675))
 		im_recog_b[4] = img.crop((425, 760 , 660 , 795))
+		# 味方の名前
+		im_recog_m[0] = img.crop((172, 236 , 408 , 284))
+		im_recog_m[1] = img.crop((172, 354 , 408 , 404))
+		im_recog_m[2] = img.crop((172, 476 , 408 , 524))
+		im_recog_m[3] = img.crop((172, 596 , 408 , 644))
+		im_recog_m[4] = img.crop((172, 716 , 408 , 764))
 
 		""" トリミングした画像の保存 """
 		for i in range(0,5):
-			im_recog_a[i].save('imgs/score/1%d.png' % (i), quality = 95)
-			im_recog_b[i].save('imgs/score/2%d.png' % (i), quality = 95)
+			im_recog_a[i].save('./imgs/score/1%d.png' % (i), quality = 95)
+			im_recog_b[i].save('./imgs/score/2%d.png' % (i), quality = 95)
+			im_recog_m[i].save('./imgs/name/1%d.png'  % (i), quality = 95)
 
 		""" 画像から数字を認識 """
 		for i in range(0,5):
 			result_a[i] = pytesseract.image_to_string(im_recog_a[i])
 			result_b[i] = pytesseract.image_to_string(im_recog_b[i])
+
+		# 味方の名前を認識
+		path2 = './imgs/name/*.png'
+		list = glob.glob(path2)
+		l = 0
+		for file in list:
+			f = 1
+			for i in range(0,11):
+				if f == 1:
+					img_rgb = cv2.imread(file)
+					img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+					template = cv2.imread('./parts/member/10%d.png' % (i),0)
+					res = cv2.matchTemplate(img_gray,template,cv2.TM_CCOEFF_NORMED)
+					threshold = 0.8
+					loc = np.where( res >= threshold)
+					z = 0
+					for pt in zip(*loc[::-1]):
+						if z == 0:
+							# その人に対応する番号を記録
+							name_a[l] = i
+							f = 0
+							l = l + 1
+						z =+ 1
 
 
 		""" 表示 [deepcopy]関数で各リストへ値を保存 """
@@ -248,6 +281,8 @@ def record():
 			kb_b = copy.deepcopy(result_b)
 			prin(kb_a,kb_b)
 
+		# 味方の順位表示
+		prin_member(name_a)
 
 	""" スプレッドシートに記録 """
 	for main in range(1,8):
@@ -497,7 +532,7 @@ def prin_sin(x,y):
 	for i in range(1,3):
 		zyuni  = "第%d神魔:" % i
 		mikata = ('{:>6}'.format(format_result(x[i-1])))
-		teki   = ('{:>6}'.format(format_result(y[i-1])))
+		teki   = ('{:>3}'.format(format_result(y[i-1])))
 		k      = " vs "
 		p      = zyuni + mikata + k + teki
 		print p
@@ -516,6 +551,15 @@ def prin_sinma(x,y):
 	wks.update_cell(5,2, shinma1)
 	wks.update_cell(6,2, shinma2)
 
+def prin_member(x):
+	member_1 = member(x[0])
+	member_2 = member(x[1])
+	member_3 = member(x[2])
+	member_4 = member(x[3])
+	member_5 = member(x[4])
+	member_zyuni = member_1 + member_2 + member_3 + member_4 + member_5
+	print "味方順位:" + member_zyuni
+
 def shinma(x):
 	if x == 0:
 		return "楽器"
@@ -533,6 +577,30 @@ def shinma(x):
 		return "弓"
 	if x == 7:
 		return "魔具"
+
+def member(x):
+	if x == 0:
+		return "ゲスまる氏"
+	if x == 1:
+		return "ヨリト"
+	if x == 2:
+		return "96黒"
+	if x == 3:
+		return "秘書"
+	if x == 4:
+		return "すぎゅ"
+	if x == 5:
+		return "ゲスゆんモフ丸"
+	if x == 6:
+		return "ひつじ"
+	if x == 7:
+		return "れみ"
+	if x == 8:
+		return "*＊凛＊*"
+	if x == 9:
+		return "(ゲωス)ぬぅ氏"
+	if x == 10:
+		return "げすぅ"
 
 
 
