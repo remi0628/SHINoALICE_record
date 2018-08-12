@@ -21,6 +21,8 @@ im_recog_b = [''] * 5
 # 最終的なリスト変数
 top_a = [''] * 2
 top_b = [''] * 2
+sbk_1 = [''] * 3
+sbk_2 = [''] * 3
 in_a  = [''] * 5
 in_b  = [''] * 5
 kf_a  = [''] * 5
@@ -60,6 +62,60 @@ def record():
 		ret, th2 = cv2.threshold(gray, t, 255, cv2.THRESH_BINARY)
 		cv2.imwrite("./imgs/gray/100%d.png" %(i), th2)
 
+	# 神魔武器読み取り
+	t = 80
+	img = cv2.imread('./img/108.png')
+	gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+	ret, th2 = cv2.threshold(gray, t, 255, cv2.THRESH_BINARY)
+	cv2.imwrite("./imgs/gray/1009.png", th2)
+
+	url_img = ('./imgs/gray/1009.png')
+	img = Image.open(url_img)
+
+	""" トリミング """
+	# 今日の神魔
+	im_recog_a[0] = img.crop((254, 405 , 290 , 442))
+	im_recog_a[1] = img.crop((288, 405 , 326 , 442))
+	im_recog_a[2] = img.crop((323, 405 , 362 , 442))
+	im_recog_b[0] = img.crop((254, 879 , 290 , 917))
+	im_recog_b[1] = img.crop((289, 879 , 326 , 917))
+	im_recog_b[2] = img.crop((323, 879 , 362 , 917))
+
+	""" トリミングした画像の保存 """
+	for i in range(0,3):
+		im_recog_a[i].save('./imgs/sinma/1%d.png' % (i), quality = 95)
+		im_recog_b[i].save('./imgs/sinma/2%d.png' % (i), quality = 95)
+
+	# 神魔判定
+	path2 = './imgs/sinma/*.png'
+	list = glob.glob(path2)
+	l = 0
+	for file in list:
+		f = 1
+		for i in range(0,8):
+			if f == 1:
+				img_rgb = cv2.imread(file)
+				img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+				template = cv2.imread('./parts/sinma/10%d.png' % (i),0)
+				res = cv2.matchTemplate(img_gray,template,cv2.TM_CCOEFF_NORMED)
+				threshold = 0.8
+				loc = np.where( res >= threshold)
+				z = 0
+				for pt in zip(*loc[::-1]):
+					if z == 0:
+						# 第一神魔
+						if l <= 2:
+							sbk_1[l] = i
+						# 第二神魔
+						if l >= 3:
+							sbk_2[l-3] = i
+						f = 0
+						l = l + 1
+					z =+ 1
+	print sbk_1
+	print sbk_2
+	print ("Shinma recognition complete!")
+
 	# TOP & 神魔カウント
 	for x in range(0,2):
 		url_img = ('./imgs/gray/100%d.png' %(x+7))
@@ -68,15 +124,15 @@ def record():
 		""" トリミング """
 		# TOP イノチとコンボ
 		if x == 0:
-			im_recog_a[0] = img.crop((114, 380 , 295 , 410))
-			im_recog_a[1] = img.crop((145, 410 , 250 , 436))
-			im_recog_b[0] = img.crop((530, 380 , 682 , 410))
-			im_recog_b[1] = img.crop((554, 410 , 660 , 436))
+			im_recog_a[0] = img.crop((114, 378 , 295 , 410))
+			im_recog_a[1] = img.crop((145, 408 , 250 , 436))
+			im_recog_b[0] = img.crop((530, 378 , 682 , 410))
+			im_recog_b[1] = img.crop((554, 408 , 660 , 440))
 		if x == 1:
 			im_recog_a[0] = img.crop((302, 350 , 372 , 380))
-			im_recog_a[1] = img.crop((302, 825 , 372 , 852))
+			im_recog_a[1] = img.crop((302, 825 , 372 , 855))
 			im_recog_b[0] = img.crop((535, 350 , 600 , 380))
-			im_recog_b[1] = img.crop((535, 825 , 600 , 852))
+			im_recog_b[1] = img.crop((535, 825 , 600 , 855))
 
 		""" トリミングした画像の保存 """
 		for i in range(0,2):
@@ -95,7 +151,7 @@ def record():
 			top_b = copy.deepcopy(result_b)
 			prin_top(top_a,top_b)
 		if x == 1:
-			print ("----------- 神魔カウント---------")
+			print ("----------- 神魔カウント-------")
 			sin_a = copy.deepcopy(result_a)
 			sin_b = copy.deepcopy(result_b)
 			prin_sin(sin_a,sin_b)
@@ -112,7 +168,7 @@ def record():
 			cell_list_b = wks.range('D5:D6')
 			result_aa = copy.deepcopy(sin_a)
 			result_bb = copy.deepcopy(sin_b)
-			
+
 		i = 0
 		for cell in cell_list_a:
 		    cell.value = format_result(result_aa[i])
@@ -441,8 +497,8 @@ def prin_top(x,y):
 def prin_sin(x,y):
 	for i in range(1,3):
 		zyuni  = "第%d神魔:" % i
-		mikata = ('{:>10}'.format(format_result(x[i-1])))
-		teki   = ('{:>10}'.format(format_result(y[i-1])))
+		mikata = ('{:>6}'.format(format_result(x[i-1])))
+		teki   = ('{:>6}'.format(format_result(y[i-1])))
 		k      = " vs "
 		p      = zyuni + mikata + k + teki
 		print p
