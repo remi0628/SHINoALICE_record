@@ -100,6 +100,32 @@ def record():
 			sin_b = copy.deepcopy(result_b)
 			prin_sin(sin_a,sin_b)
 
+	""" スプレッドシートに記録 """
+	for top in range(1,3):
+		if top == 1:
+			cell_list_a = wks.range('C7:C8')
+			cell_list_b = wks.range('D7:D8')
+			result_aa = copy.deepcopy(top_a)
+			result_bb = copy.deepcopy(top_b)
+		if top == 2:
+			cell_list_a = wks.range('C5:C6')
+			cell_list_b = wks.range('D5:D6')
+			result_aa = copy.deepcopy(sin_a)
+			result_bb = copy.deepcopy(sin_b)
+			
+		i = 0
+		for cell in cell_list_a:
+		    cell.value = format_result(result_aa[i])
+		    i = i + 1
+		i = 0
+		for cell in cell_list_b:
+		    cell.value = format_result(result_bb[i])
+		    i = i + 1
+
+		# 各貢献度アプッデート
+		wks.update_cells(cell_list_a)
+		wks.update_cells(cell_list_b)
+
 	# 各貢献度画像認識
 	for x in range(0,7):
 		# 画像の読み込み
