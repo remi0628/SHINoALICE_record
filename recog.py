@@ -14,25 +14,27 @@ import numpy as np
 import cv2
 
 # [a]:味方貢献度リスト [b]:敵貢献度リスト
-result_a = [''] * 5
-result_b = [''] * 5
+result_a   = [''] * 5
+result_b   = [''] * 5
 im_recog_a = [''] * 5
 im_recog_b = [''] * 5
 # 最終的なリスト変数
-in_a = [''] * 5
-in_b = [''] * 5
-kf_a = [''] * 5
-kf_b = [''] * 5
-mk_a = [''] * 5
-mk_b = [''] * 5
-mb_a = [''] * 5
-mb_b = [''] * 5
-tk_a = [''] * 5
-tk_b = [''] * 5
-tb_a = [''] * 5
-tb_b = [''] * 5
-kb_a = [''] * 5
-kb_b = [''] * 5
+top_a = [''] * 2
+top_b = [''] * 2
+in_a  = [''] * 5
+in_b  = [''] * 5
+kf_a  = [''] * 5
+kf_b  = [''] * 5
+mk_a  = [''] * 5
+mk_b  = [''] * 5
+mb_a  = [''] * 5
+mb_b  = [''] * 5
+tk_a  = [''] * 5
+tk_b  = [''] * 5
+tb_a  = [''] * 5
+tb_b  = [''] * 5
+kb_a  = [''] * 5
+kb_b  = [''] * 5
 
 # time
 t = 0
@@ -49,11 +51,56 @@ def record():
 	for i in range(0,9):
 		image = list[i]
 		t = 150
+		if i == 7:
+			t = 80
+		if i == 8:
+			t = 180
 		img = cv2.imread(image)
 		gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 		ret, th2 = cv2.threshold(gray, t, 255, cv2.THRESH_BINARY)
 		cv2.imwrite("./imgs/gray/100%d.png" %(i), th2)
 
+	# TOP & 神魔カウント
+	for x in range(0,2):
+		url_img = ('./imgs/gray/100%d.png' %(x+7))
+		img = Image.open(url_img)
+
+		""" トリミング """
+		# TOP イノチとコンボ
+		if x == 0:
+			im_recog_a[0] = img.crop((114, 380 , 295 , 410))
+			im_recog_a[1] = img.crop((145, 410 , 250 , 436))
+			im_recog_b[0] = img.crop((530, 380 , 682 , 410))
+			im_recog_b[1] = img.crop((554, 410 , 660 , 436))
+		if x == 1:
+			im_recog_a[0] = img.crop((302, 350 , 372 , 380))
+			im_recog_a[1] = img.crop((302, 825 , 372 , 852))
+			im_recog_b[0] = img.crop((535, 350 , 600 , 380))
+			im_recog_b[1] = img.crop((535, 825 , 600 , 852))
+
+		""" トリミングした画像の保存 """
+		for i in range(0,2):
+			im_recog_a[i].save('imgs/score/3%d.png' % (i), quality = 95)
+			im_recog_b[i].save('imgs/score/4%d.png' % (i), quality = 95)
+
+		""" 画像から数字を認識 """
+		for i in range(0,2):
+			result_a[i] = pytesseract.image_to_string(im_recog_a[i])
+			result_b[i] = pytesseract.image_to_string(im_recog_b[i])
+
+		""" 表示 [deepcopy]関数で各リストへ値を保存 """
+		if x == 0:
+			print ("-------------- TOP -----------")
+			top_a = copy.deepcopy(result_a)
+			top_b = copy.deepcopy(result_b)
+			prin_top(top_a,top_b)
+		if x == 1:
+			print ("----------- 神魔カウント---------")
+			sin_a = copy.deepcopy(result_a)
+			sin_b = copy.deepcopy(result_b)
+			prin_sin(sin_a,sin_b)
+
+	# 各貢献度画像認識
 	for x in range(0,7):
 		# 画像の読み込み
 		url_img = ('./imgs/gray/100%d.png' %(x))
@@ -251,7 +298,7 @@ def image_name():
 					print file
 					os.remove(file)
 	# ファイル内9枚以内で名前変更していない画像があれば変更
-	if len(glob.glob('./img/*')) <= 10:
+	if len(glob.glob('./img/*')) < 10:
 		# ファイル名の一括変更 [.PNG, .jpg, .jpeg]
 		for m in range(0,3):
 			if m == 0:
@@ -278,6 +325,7 @@ def image_name():
 								print (file + " is rename " + './img/10' + str(i) + '.png')
 								f = 0
 							z =+ 1
+			 
 	else:
 		print ("Image file, no change.")
 
@@ -345,6 +393,31 @@ def prin(x,y):
 		mikata = ('{:>10}'.format(format_result(x[i-1])))
 		teki   = ('{:>10}'.format(format_result(y[i-1])))
 		k      = "   "
+		p      = zyuni + mikata + k + teki
+		print p
+
+def prin_top(x,y):
+	for i in range(1,3):
+		if i == 1:
+			zyuni  = "イノチ:"
+			mikata = ('{:>10}'.format(format_result(x[i-1])))
+			teki   = ('{:>10}'.format(format_result(y[i-1])))
+			k      = "   "
+			p      = zyuni + mikata + k + teki
+		if i == 2:
+			zyuni  = "コンボ:"
+			mikata = ('{:>10}'.format(format_result(x[i-1])))
+			teki   = ('{:>10}'.format(format_result(y[i-1])))
+			k      = "   "
+			p      = zyuni + mikata + k + teki
+		print p
+
+def prin_sin(x,y):
+	for i in range(1,3):
+		zyuni  = "第%d神魔:" % i
+		mikata = ('{:>10}'.format(format_result(x[i-1])))
+		teki   = ('{:>10}'.format(format_result(y[i-1])))
+		k      = " vs "
 		p      = zyuni + mikata + k + teki
 		print p
 
