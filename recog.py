@@ -21,6 +21,7 @@ im_recog_b = [''] * 5
 im_recog_m = [''] * 5
 name_a     = [''] * 5
 # 最終的なリスト変数
+member_a   = [''] * 5
 top_a = [''] * 2
 top_b = [''] * 2
 sbk_1 = [''] * 3
@@ -282,7 +283,7 @@ def record():
 			prin(kb_a,kb_b)
 
 		# 味方の順位表示
-		prin_member(name_a)
+		prin_member(name_a, x)
 
 	""" スプレッドシートに記録 """
 	for main in range(1,8):
@@ -551,15 +552,45 @@ def prin_sinma(x,y):
 	wks.update_cell(5,2, shinma1)
 	wks.update_cell(6,2, shinma2)
 
-def prin_member(x):
-	member_1 = member(x[0])
-	member_2 = member(x[1])
-	member_3 = member(x[2])
-	member_4 = member(x[3])
-	member_5 = member(x[4])
-	member_zyuni = member_1 + member_2 + member_3 + member_4 + member_5
+def prin_member(x, y):
+	result = [''] * 5
+	member_a[0] = member(x[0])
+	member_a[1] = member(x[1])
+	member_a[2] = member(x[2])
+	member_a[3] = member(x[3])
+	member_a[4] = member(x[4])
+	member_zyuni = member_a[0] + member_a[1] + member_a[2] + member_a[3] + member_a[4]
 	print "味方順位:" + member_zyuni
+	# スプレッドシートに記録
+	if y == 0:
+		cell_list_a = wks.range('B19:B23')
+		result = copy.deepcopy(member_a)
+	if y == 1:
+		cell_list_a = wks.range('B25:B29')
+		result = copy.deepcopy(member_a)
+	if y == 2:
+		cell_list_a = wks.range('B31:B35')
+		result = copy.deepcopy(member_a)
+	if y == 3:
+		cell_list_a = wks.range('B37:B41')
+		result = copy.deepcopy(member_a)
+	if y == 4:
+		cell_list_a = wks.range('B43:B47')
+		result = copy.deepcopy(member_a)
+	if y == 5:
+		cell_list_a = wks.range('B49:B53')
+		result = copy.deepcopy(member_a)
+	if y == 6:
+		cell_list_a = wks.range('B55:B59')
+		result = copy.deepcopy(member_a)
+	i = 0
+	for cell in cell_list_a:
+	    cell.value = result[i]
+	    i = i + 1
+	# 各貢献度アプッデート
+	wks.update_cells(cell_list_a)
 
+# 神魔
 def shinma(x):
 	if x == 0:
 		return "楽器"
@@ -577,7 +608,7 @@ def shinma(x):
 		return "弓"
 	if x == 7:
 		return "魔具"
-
+# ギルドメンバー
 def member(x):
 	if x == 0:
 		return "ゲスまる氏"

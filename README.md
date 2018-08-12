@@ -1,9 +1,9 @@
 # SHINoALICE_records
+.Simply pass the screenshot of the contribution to the specified file and automatically fill the value in the spreadsheet.  
+(・スクショした貢献度の画像をimgファイルに渡し実行するだけで貢献度をGoogleスプレッドシートへ自動的に記録します。)  
 
 ## Description
 SHINoALICE_Colosseum  
-.Simply pass the screenshot of the contribution to the specified file and automatically fill the value in the spreadsheet.  
-(・スクショした貢献度の画像をimgファイルに渡し実行するだけで貢献度をGoogleスプレッドシートへ自動的に記録します。)  
 
 .Corresponding image size is (750px x 1334px)
 .Type to put in folder: [.PNG, .jpg, .jpeg] ok!! not[.png]  
