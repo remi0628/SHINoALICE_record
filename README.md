@@ -20,23 +20,23 @@ SHINoALICE_Colosseum
 ・pipに入っていないライブラリを全てダウンロード。(python2.7.14で作成されています)  
 ・必要なフォルダは下記のように構成して下さい。([]があるフォルダは何も入れないよう注意)  
 
-'''main
-main / img[このフォルダに画像を入れる]
-	 / imgs  / gray   []
-	         / name   []
-	         / score  []
-	         / sinma  []
-	 / parts / job    [各貢献度表の一部.画像]
-	 / parts / member [ギルドメンバーの名前.画像]
-	 / parts / sinma  [神魔武器.画像]
-	 / recog.py [メインファイル]
-	 / USER.json [サービスアカウントキーのJSONファイル]
-'''
+
+    main / img[このフォルダに画像を入れる]
+    	 / imgs  / gray   []
+    	         / name   []
+    	         / score  []
+    	         / sinma  []
+    	 / parts / job    [各貢献度表の一部.画像]
+    	 / parts / member [ギルドメンバーの名前.画像]
+    	 / parts / sinma  [神魔武器.画像]
+    	 / recog.py [メインファイル]
+    	 / USER.json [サービスアカウントキーのJSONファイル]
+
 
 ・[/parts/member/]にはグレースケール化させたギルドメンバーの名前画像を入れる。  
 ・[/recog.py]内のスプレッドシート連携部分でJSONファイルやシート名を記入して完了。  
 
-・起動方法
+・起動方法  
 '$python2 recog.py'
 
 ## LICENCE
