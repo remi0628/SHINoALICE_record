@@ -44,7 +44,7 @@ kb_b  = [''] * 5
 # time
 t = 0
 
-""" 貢献度記録 """
+""" メイン """
 def record():
 	""" 画像のファイル名を読み込めるように変更 """
 	image_name()
@@ -74,7 +74,6 @@ def record():
 
 	url_img = ('./imgs/gray/1009.png')
 	img = Image.open(url_img)
-
 	# トリミング
 	# 今日の神魔
 	im_recog_a[0] = img.crop((254, 405 , 290 , 442))
@@ -83,13 +82,11 @@ def record():
 	im_recog_b[0] = img.crop((254, 879 , 290 , 917))
 	im_recog_b[1] = img.crop((289, 879 , 326 , 917))
 	im_recog_b[2] = img.crop((323, 879 , 362 , 917))
-
 	# トリミングした画像の保存
 	for i in range(0,3):
 		im_recog_a[i].save('./imgs/sinma/1%d.png' % (i), quality = 95)
 		im_recog_b[i].save('./imgs/sinma/2%d.png' % (i), quality = 95)
-
-	# 神魔判定
+	# 神魔画像判定
 	path2 = './imgs/sinma/*.png'
 	list = glob.glob(path2)
 	l = 0
@@ -117,11 +114,11 @@ def record():
 					z =+ 1
 	print ("Shinma recognition complete!")
 
+
 	""" TOP & 神魔カウント """
 	for x in range(0,2):
 		url_img = ('./imgs/gray/100%d.png' %(x+7))
 		img = Image.open(url_img)
-
 		# トリミング
 		# TOP イノチとコンボ
 		if x == 0:
@@ -134,12 +131,10 @@ def record():
 			im_recog_a[1] = img.crop((302, 825 , 372 , 855))
 			im_recog_b[0] = img.crop((535, 350 , 600 , 380))
 			im_recog_b[1] = img.crop((535, 825 , 600 , 855))
-
 		# トリミングした画像の保存
 		for i in range(0,2):
 			im_recog_a[i].save('imgs/score/3%d.png' % (i), quality = 95)
 			im_recog_b[i].save('imgs/score/4%d.png' % (i), quality = 95)
-
 		# 画像から数字を認識
 		for i in range(0,2):
 			result_a[i] = pytesseract.image_to_string(im_recog_a[i])
@@ -158,6 +153,7 @@ def record():
 			sin_b = copy.deepcopy(result_b)
 			prin_sin(sin_a,sin_b)
 
+
 	""" スプレッドシートに記録 [イノチ、コンボ、神魔武器、神魔カウント] """
 	for top in range(1,3):
 		if top == 1:
@@ -170,7 +166,7 @@ def record():
 			cell_list_b = wks.range('D5:D6')
 			result_aa = copy.deepcopy(sin_a)
 			result_bb = copy.deepcopy(sin_b)
-
+		# 各項目記録
 		i = 0
 		for cell in cell_list_a:
 		    cell.value = format_result(result_aa[i])
@@ -179,18 +175,17 @@ def record():
 		for cell in cell_list_b:
 		    cell.value = format_result(result_bb[i])
 		    i = i + 1
-
-		# 各貢献度アプッデート
+		# 各アップデート
 		wks.update_cells(cell_list_a)
 		wks.update_cells(cell_list_b)
 
-	# 各貢献度画像認識
+
+	""" 各貢献度 """
 	for x in range(0,7):
 		# 画像の読み込み
 		url_img = ('./imgs/gray/100%d.png' %(x))
 		img = Image.open(url_img)
-
-		""" トリミング　"""
+		# トリミング
 		# 味方の貢献度
 		im_recog_a[0] = img.crop((160, 280 , 400 , 315))
 		im_recog_a[1] = img.crop((160, 400 , 400 , 435))
@@ -209,18 +204,15 @@ def record():
 		im_recog_m[2] = img.crop((172, 476 , 408 , 524))
 		im_recog_m[3] = img.crop((172, 596 , 408 , 644))
 		im_recog_m[4] = img.crop((172, 716 , 408 , 764))
-
-		""" トリミングした画像の保存 """
+		# トリミングした画像の保存
 		for i in range(0,5):
 			im_recog_a[i].save('./imgs/score/1%d.png' % (i), quality = 95)
 			im_recog_b[i].save('./imgs/score/2%d.png' % (i), quality = 95)
 			im_recog_m[i].save('./imgs/name/1%d.png'  % (i), quality = 95)
-
-		""" 画像から数字を認識 """
+		# 画像から数字を認識
 		for i in range(0,5):
 			result_a[i] = pytesseract.image_to_string(im_recog_a[i])
 			result_b[i] = pytesseract.image_to_string(im_recog_b[i])
-
 		# 味方の名前を認識
 		path2 = './imgs/name/*.png'
 		list = glob.glob(path2)
@@ -281,11 +273,11 @@ def record():
 			kb_a = copy.deepcopy(result_a)
 			kb_b = copy.deepcopy(result_b)
 			prin(kb_a,kb_b)
-
 		# 味方の順位表示
 		prin_member(name_a, x)
 
-	""" スプレッドシートに記録 """
+
+	""" 各貢献度スプレッドシートに記録 """
 	for main in range(1,8):
 		if main == 1:
 			cell_list_a = wks.range('C19:C23')
@@ -322,7 +314,7 @@ def record():
 			cell_list_b = wks.range('E55:E59')
 			result_aa = copy.deepcopy(kb_a)
 			result_bb = copy.deepcopy(kb_b)
-
+		# 各貢献度記録
 		i = 0
 		for cell in cell_list_a:
 		    cell.value = format_result(result_aa[i])
@@ -331,10 +323,11 @@ def record():
 		for cell in cell_list_b:
 		    cell.value = format_result(result_bb[i])
 		    i = i + 1
-
 		# 各貢献度アプッデート
 		wks.update_cells(cell_list_a)
 		wks.update_cells(cell_list_b)
+
+
 
 """ ファイル名変更の際に照らし合わせに使う画像 """
 def job(x):
@@ -442,7 +435,6 @@ def image_name():
 								print (file + " is rename " + './img/10' + str(i) + '.png')
 								f = 0
 							z =+ 1
-			 
 	else:
 		print ("Image file, no change.")
 
@@ -488,6 +480,7 @@ def clear_name(p):
 			wks.update_cells(cell_list)
 
 
+
 """ 間違えて認識した[.]を[,]に置換 """
 def format_result(result):
 	text = str(result)
@@ -513,6 +506,7 @@ def prin(x,y):
 		p      = zyuni + mikata + k + teki
 		print p
 
+# イノチとコンボ表示
 def prin_top(x,y):
 	for i in range(1,3):
 		if i == 1:
@@ -529,6 +523,7 @@ def prin_top(x,y):
 			p      = zyuni + mikata + k + teki
 		print p
 
+# 神魔の表示
 def prin_sin(x,y):
 	for i in range(1,3):
 		zyuni  = "第%d神魔:" % i
@@ -538,6 +533,8 @@ def prin_sin(x,y):
 		p      = zyuni + mikata + k + teki
 		print p
 
+""" 神魔、ギルメンの画像判定に必要な部分 """
+# 神魔
 def prin_sinma(x,y):
 	shin1_1 = shinma(x[0])
 	shin1_2 = shinma(x[1])
@@ -552,6 +549,7 @@ def prin_sinma(x,y):
 	wks.update_cell(5,2, shinma1)
 	wks.update_cell(6,2, shinma2)
 
+# ギルドメンバー
 def prin_member(x, y):
 	result = [''] * 5
 	member_a[0] = member(x[0])
@@ -635,16 +633,19 @@ def member(x):
 
 
 
+""" メイン """
 if __name__ == '__main__':
 	"""　Google Sheets連携 """
 	scope = ['https://spreadsheets.google.com/feeds',
 			 'https://www.googleapis.com/auth/drive']
-	# 権限の受け渡し＆認証
+	# 権限の受け渡し＆認証 [.json]ファイル
 	credentials = ServiceAccountCredentials.from_json_keyfile_name('test-5eda83f2e6e5.json', scope)
 	gc = gspread.authorize(credentials)
+	# 記入したいスプレッドシートの名前を入れる
 	wks = gc.open('suge-oukoku').sheet1
 	# スプレッドシートに記録の準備合図
 	wks.update_cell(1,1, u'SHINoALICE')
+
 
 	""" 表のクリア """
 	# [1]:相手ギルド名 [2]:神魔やイノチ、コンボ [3]:相手の名前 [4]:味方の名前
