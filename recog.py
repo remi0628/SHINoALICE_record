@@ -112,8 +112,6 @@ def record():
 						f = 0
 						l = l + 1
 					z =+ 1
-	print sbk_1
-	print sbk_2
 	print ("Shinma recognition complete!")
 
 	# TOP & 神魔カウント
@@ -152,6 +150,7 @@ def record():
 			prin_top(top_a,top_b)
 		if x == 1:
 			print ("----------- 神魔カウント-------")
+			prin_sinma(sbk_1,sbk_2)
 			sin_a = copy.deepcopy(result_a)
 			sin_b = copy.deepcopy(result_b)
 			prin_sin(sin_a,sin_b)
@@ -502,6 +501,38 @@ def prin_sin(x,y):
 		k      = " vs "
 		p      = zyuni + mikata + k + teki
 		print p
+
+def prin_sinma(x,y):
+	shin1_1 = shinma(x[0])
+	shin1_2 = shinma(x[1])
+	shin1_3 = shinma(x[2])
+	shin2_1 = shinma(y[0])
+	shin2_2 = shinma(y[1])
+	shin2_3 = shinma(y[2])
+	shinma1 = shin1_1 + shin1_2 + shin1_3
+	shinma2 = shin2_1 + shin2_2 + shin2_3
+	print "第1神魔:" + shinma1
+	print "第2神魔:" + shinma2
+	wks.update_cell(5,2, shinma1)
+	wks.update_cell(6,2, shinma2)
+
+def shinma(x):
+	if x == 0:
+		return "楽器"
+	if x == 1:
+		return "魔書"
+	if x == 2:
+		return "祈祷"
+	if x == 3:
+		return "刀"
+	if x == 4:
+		return "槍"
+	if x == 5:
+		return "槌"
+	if x == 6:
+		return "弓"
+	if x == 7:
+		return "魔具"
 
 
 
