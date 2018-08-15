@@ -59,60 +59,62 @@ def record():
 		if i == 7:
 			t = 80
 		if i == 8:
-			t = 180
+			t = 200
 		img = cv2.imread(image)
 		gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 		ret, th2 = cv2.threshold(gray, t, 255, cv2.THRESH_BINARY)
 		cv2.imwrite("./imgs/gray/100%d.png" %(i), th2)
 
-	""" 神魔武器読み込み """
-	t = 80
-	img = cv2.imread('./img/108.png')
-	gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-	ret, th2 = cv2.threshold(gray, t, 255, cv2.THRESH_BINARY)
-	cv2.imwrite("./imgs/gray/1009.png", th2)
+	if s == 1:
+		""" 神魔武器読み込み """
+		t = 100
+		img = cv2.imread('./img/108.png')
+		gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+		ret, th2 = cv2.threshold(gray, t, 255, cv2.THRESH_BINARY)
+		cv2.imwrite("./imgs/gray/1009.png", th2)
 
-	url_img = ('./imgs/gray/1009.png')
-	img = Image.open(url_img)
-	# トリミング
-	# 今日の神魔
-	im_recog_a[0] = img.crop((254, 405 , 290 , 442))
-	im_recog_a[1] = img.crop((288, 405 , 326 , 442))
-	im_recog_a[2] = img.crop((323, 405 , 362 , 442))
-	im_recog_b[0] = img.crop((254, 879 , 290 , 917))
-	im_recog_b[1] = img.crop((289, 879 , 326 , 917))
-	im_recog_b[2] = img.crop((323, 879 , 362 , 917))
-	# トリミングした画像の保存
-	for i in range(0,3):
-		im_recog_a[i].save('./imgs/sinma/1%d.png' % (i), quality = 95)
-		im_recog_b[i].save('./imgs/sinma/2%d.png' % (i), quality = 95)
-	# 神魔画像判定
-	path2 = './imgs/sinma/*.png'
-	list = glob.glob(path2)
-	l = 0
-	for file in list:
-		f = 1
-		for i in range(0,8):
-			if f == 1:
-				img_rgb = cv2.imread(file)
-				img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-				template = cv2.imread('./parts/sinma/10%d.png' % (i),0)
-				res = cv2.matchTemplate(img_gray,template,cv2.TM_CCOEFF_NORMED)
-				threshold = 0.8
-				loc = np.where( res >= threshold)
-				z = 0
-				for pt in zip(*loc[::-1]):
-					if z == 0:
-						# 第一神魔
-						if l <= 2:
-							sbk_1[l] = i
-						# 第二神魔
-						if l >= 3:
-							sbk_2[l-3] = i
-						f = 0
-						l = l + 1
-					z =+ 1
-	print ("Shinma recognition complete!")
+		url_img = ('./imgs/gray/1009.png')
+		img = Image.open(url_img)
+		# トリミング
+		# 今日の神魔
+		im_recog_a[0] = img.crop((254, 405 , 290 , 442))
+		im_recog_a[1] = img.crop((288, 405 , 326 , 442))
+		im_recog_a[2] = img.crop((323, 405 , 362 , 442))
+		im_recog_b[0] = img.crop((254, 879 , 290 , 917))
+		im_recog_b[1] = img.crop((289, 879 , 326 , 917))
+		im_recog_b[2] = img.crop((323, 879 , 362 , 917))
+		# トリミングした画像の保存
+		for i in range(0,3):
+			im_recog_a[i].save('./imgs/sinma/1%d.png' % (i), quality = 95)
+			im_recog_b[i].save('./imgs/sinma/2%d.png' % (i), quality = 95)
+		# 神魔画像判定
+		path2 = './imgs/sinma/*.png'
+		list = glob.glob(path2)
+		l = 0
+		for file in list:
+			f = 1
+			for i in range(0,8):
+				if f == 1:
+					img_rgb = cv2.imread(file)
+					img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+					temp_rgb = cv2.imread('./parts/sinma/10%d.png' % (i))
+					template = cv2.cvtColor(temp_rgb, cv2.COLOR_BGR2GRAY)
+					res = cv2.matchTemplate(img_gray,template,cv2.TM_CCOEFF_NORMED)
+					threshold = 0.7
+					loc = np.where( res >= threshold)
+					z = 0
+					for pt in zip(*loc[::-1]):
+						if z == 0:
+							# 第一神魔
+							if l <= 2:
+								sbk_1[l] = i
+							# 第二神魔
+							if l >= 3:
+								sbk_2[l-3] = i
+							f = 0
+							l = l + 1
+						z =+ 1
+		print ("Shinma recognition complete!")
 
 
 	""" TOP & 神魔カウント """
@@ -148,7 +150,8 @@ def record():
 			prin_top(top_a,top_b)
 		if x == 1:
 			print ("----------- 神魔カウント-------")
-			prin_sinma(sbk_1,sbk_2)
+			if s == 1:
+				prin_sinma(sbk_1,sbk_2)
 			sin_a = copy.deepcopy(result_a)
 			sin_b = copy.deepcopy(result_b)
 			prin_sin(sin_a,sin_b)
@@ -213,28 +216,30 @@ def record():
 		for i in range(0,5):
 			result_a[i] = pytesseract.image_to_string(im_recog_a[i])
 			result_b[i] = pytesseract.image_to_string(im_recog_b[i])
-		# 味方の名前を認識
-		path2 = './imgs/name/*.png'
-		list = glob.glob(path2)
-		l = 0
-		for file in list:
-			f = 1
-			for i in range(0,11):
-				if f == 1:
-					img_rgb = cv2.imread(file)
-					img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-					template = cv2.imread('./parts/member/10%d.png' % (i),0)
-					res = cv2.matchTemplate(img_gray,template,cv2.TM_CCOEFF_NORMED)
-					threshold = 0.8
-					loc = np.where( res >= threshold)
-					z = 0
-					for pt in zip(*loc[::-1]):
-						if z == 0:
-							# その人に対応する番号を記録
-							name_a[l] = i
-							f = 0
-							l = l + 1
-						z =+ 1
+
+		if n == 1:
+			# 味方の名前を認識
+			path2 = './imgs/name/*.png'
+			list = glob.glob(path2)
+			l = 0
+			for file in list:
+				f = 1
+				for i in range(0,15):
+					if f == 1:
+						img_rgb = cv2.imread(file)
+						img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+						template = cv2.imread('./parts/member/10%d.png' % (i),0)
+						res = cv2.matchTemplate(img_gray,template,cv2.TM_CCOEFF_NORMED)
+						threshold = 0.8
+						loc = np.where( res >= threshold)
+						z = 0
+						for pt in zip(*loc[::-1]):
+							if z == 0:
+								# その人に対応する番号を記録
+								name_a[l] = i
+								f = 0
+								l = l + 1
+							z =+ 1
 
 
 		""" 表示 [deepcopy]関数で各リストへ値を保存 """
@@ -273,8 +278,9 @@ def record():
 			kb_a = copy.deepcopy(result_a)
 			kb_b = copy.deepcopy(result_b)
 			prin(kb_a,kb_b)
-		# 味方の順位表示
-		prin_member(name_a, x)
+		if n == 1:
+			# 味方の順位表示
+			prin_member(name_a, x)
 
 
 	""" 各貢献度スプレッドシートに記録 """
@@ -327,6 +333,8 @@ def record():
 		wks.update_cells(cell_list_a)
 		wks.update_cells(cell_list_b)
 
+	print "Recording completed on the sheet!"
+
 
 
 """ ファイル名変更の際に照らし合わせに使う画像 """
@@ -353,16 +361,22 @@ def job(x):
 """ 画像のファイル名変更 [./img/*.PNG] """
 # 画像の入れ替えがあった場合[1],変更無しの場合[0]を返す
 def image_name():
-	print ("1st step: image file check...")
+	print ("image file check...")
 	# ファイル内に追加された画像があるか確認
 	if len(glob.glob('./img/*')) >= 10:
 		path  = './img/*.png'
 		path2 = './img/*.PNG'
 		path3 = './img/'
 		i = 0
-		# 判定する次の画像[.PNG]が9枚あるか確認
+		# 判定する次の画像[.PNG]&[.jpg]&[.jpeg]が9枚あるか確認
 		list = glob.glob(path2)
-		if len(list) == 9:
+		a = len(list)
+		path2 = './img/*.jpg'
+		list = glob.glob(path2)
+		b = len(list)
+		c = a + b
+		path2 = './img/*.PNG'
+		if c == 9:
 			# 前回使用した画像[.png]が1枚以上あるか確認し削除
 			list = glob.glob(path)
 			if len(list) >= 1:
@@ -399,11 +413,17 @@ def image_name():
 	  		print ("images name change ok!!")
 	  	else:
 	  		# ファイル内の画像が9枚以上で新しく判定したい画像が9枚ぴったりなければ[.PNG]画像を全削除
-	  		print ("There are not 9 [.PNG] images.")
+	  		print ("There are not 9 [.PNG]&[.jpg]&[.jpeg] images.")
 	  		print ("Because there are not enough images, delete unnecessary images.")
 	  		list = glob.glob(path2)
 	 		if len(list) >= 1:
 	 			print ("delete images...")
+				for file in list:
+					print file
+					os.remove(file)
+			path2 = './img/*.jpg'
+			list = glob.glob(path2)
+			if len(list) >= 1:
 				for file in list:
 					print file
 					os.remove(file)
@@ -557,7 +577,7 @@ def prin_member(x, y):
 	member_a[2] = member(x[2])
 	member_a[3] = member(x[3])
 	member_a[4] = member(x[4])
-	member_zyuni = member_a[0] + member_a[1] + member_a[2] + member_a[3] + member_a[4]
+	member_zyuni = "1."+member_a[0] + ", 2."+member_a[1] + ", 3."+member_a[2] + ", 4."+member_a[3] + ", 5."+member_a[4]
 	print "味方順位:" + member_zyuni
 	# スプレッドシートに記録
 	if y == 0:
@@ -609,32 +629,44 @@ def shinma(x):
 # ギルドメンバー
 def member(x):
 	if x == 0:
-		return "ゲスまる氏"
+		return "＊riria＊*"
 	if x == 1:
-		return "ヨリト"
+		return "遅刻戦犯野郎M"
 	if x == 2:
-		return "96黒"
+		return "AO.かでぃあ"
 	if x == 3:
-		return "秘書"
+		return "チェザーレ"
 	if x == 4:
-		return "すぎゅ"
+		return "はらへった"
 	if x == 5:
-		return "ゲスゆんモフ丸"
+		return "みゃみやみ"
 	if x == 6:
-		return "ひつじ"
+		return "しら"
 	if x == 7:
-		return "れみ"
+		return "もぁ"
 	if x == 8:
-		return "*＊凛＊*"
+		return "いのりぃ＊*"
 	if x == 9:
-		return "(ゲωス)ぬぅ氏"
+		return "湯行き・ω・"
 	if x == 10:
-		return "げすぅ"
+		return "暴食ぶんぽてち"
+	if x == 11:
+		return "ツグ(ﾟ ▽ﾟ )"
+	if x == 12:
+		return "Sinon"
+	if x == 13:
+		return "GIN"
+	if x == 14:
+		return "れみ"
 
 
 
 """ メイン """
 if __name__ == '__main__':
+	# 神魔武器判定したい場合[1] : しない場合[0]
+	s = 1
+	# ギルメンの名前を判定したい場合[1] : しない場合[0]
+	n = 1
 	"""　Google Sheets連携 """
 	scope = ['https://spreadsheets.google.com/feeds',
 			 'https://www.googleapis.com/auth/drive']
@@ -642,7 +674,8 @@ if __name__ == '__main__':
 	credentials = ServiceAccountCredentials.from_json_keyfile_name('test-5eda83f2e6e5.json', scope)
 	gc = gspread.authorize(credentials)
 	# 記入したいスプレッドシートの名前を入れる
-	wks = gc.open('suge-oukoku').sheet1
+	wb = gc.open('suge-oukoku')
+	wks = wb.worksheet("sheet1")
 	# スプレッドシートに記録の準備合図
 	wks.update_cell(1,1, u'SHINoALICE')
 
