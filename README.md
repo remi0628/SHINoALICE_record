@@ -11,7 +11,8 @@ SHINoALICE_Colosseum
 (Corresponding image size is (750px x 1334px) )     
 (Type to put in folder: [.PNG, .jpg, .jpeg] ok!! not[.png] )  
 
-## DEMO
+## Demo Video
+https://twitter.com/rem_rem0/status/1028866263018131456?s=20
 
 
 ## Usage
@@ -39,10 +40,6 @@ SHINoALICE_Colosseum
 ・起動方法  
     $python2 recog.py
 
-
-## Execution Video
-https://twitter.com/rem_rem0/status/1028866263018131456?s=20
-
 ## LICENCE
-.For individual use okay  
-(・個人使用ならおk!)  
+・個人使用なら大丈夫です。  
+(・For individual use okay  )  
