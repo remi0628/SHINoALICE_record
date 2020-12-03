@@ -1,15 +1,16 @@
 # SHINoALICE_records
-.Simply pass the screenshot of the contribution to the specified file and automatically fill the value in the spreadsheet.  
-(・スクショした貢献度の画像をimgファイルに渡し実行するだけで貢献度をGoogleスプレッドシートへ自動的に記録します。)  
+・スクショした貢献度の画像をimgファイルに渡し実行するだけで貢献度をGoogleスプレッドシートへ自動的に記録します。  
+(・Simply pass the screenshot of the contribution to the specified file and automatically fill the value in the spreadsheet.  )  
 
 ## Description
 SHINoALICE_Colosseum  
 
-.Corresponding image size is (750px x 1334px)  
-.Type to put in folder: [.PNG, .jpg, .jpeg] ok!! not[.png]  
+対応しているスクリーンショットのサイズは750px x 1334px のみです。  
+[.PNG, .jpg, .jpeg] 画像は対応していますが[.png] 画像処理に影響があるので入れないでください。  
 
-(対応しているスクリーンショットのサイズは750px x 1334px のみです。)  
-([.PNG, .jpg, .jpeg] 画像は対応していますが[.png] 画像処理に影響があるので入れないでください。)  
+(Corresponding image size is (750px x 1334px) )  
+
+(Type to put in folder: [.PNG, .jpg, .jpeg] ok!! not[.png] )  
 
 ## DEMO
 
@@ -38,6 +39,10 @@ SHINoALICE_Colosseum
 
 ・起動方法  
     $python2 recog.py
+
+
+## Execution Video
+https://twitter.com/rem_rem0/status/1028866263018131456?s=20
 
 ## LICENCE
 .For individual use okay  
