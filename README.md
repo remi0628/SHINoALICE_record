@@ -8,8 +8,7 @@ SHINoALICE_Colosseum
 対応しているスクリーンショットのサイズは750px x 1334px のみです。  
 [.PNG, .jpg, .jpeg] 画像は対応していますが[.png] 画像処理に影響があるので入れないでください。  
 
-(Corresponding image size is (750px x 1334px) )  
-
+(Corresponding image size is (750px x 1334px) )     
 (Type to put in folder: [.PNG, .jpg, .jpeg] ok!! not[.png] )  
 
 ## DEMO
