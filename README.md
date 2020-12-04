@@ -39,18 +39,21 @@ https://twitter.com/rem_rem0/status/1028866263018131456?s=20
 
 ・起動方法  
     $python2 recog.py
-
+    
+---
 # image
 ・読み込み画像
   読み込ませる画像は以下の通りです。（各種貢献度表）  
 　スクリーンショットをそのままフォルダへ渡します。  
 <img width="500" alt="スクリーンショット 2018-08-13 14 10 54" src="https://user-images.githubusercontent.com/16487150/101099994-17fd1680-3609-11eb-9b7f-884603a6602f.png">
 
+---
 ・貢献度表のうちの一つ 
 　黒く塗っている部分がユーザー名になります。  
 　ユーザー名・貢献度の表示場所は固定なので検出に掛ける範囲を設定でその部分に絞っています。  
 <img width="300" alt="スクリーンショット 2018-08-13 14 13 16" src="https://user-images.githubusercontent.com/16487150/101100486-ef295100-3609-11eb-866e-261179b9f4ed.png">
 
+---
 ・ユーザー名は記号なども使用されている事がある為、最後はOCRではなくパターンマッチングで特定  
 　特定に使用するユーザー名画像は[ /parts/member ]内に予め保存しておきます。  
 　例えば以下の写真の様にユーザー名のある範囲が自動で切り取られます。  
@@ -62,16 +65,18 @@ https://twitter.com/rem_rem0/status/1028866263018131456?s=20
 　一致する画像が見つかれば、メンバーの誰の貢献度なのか分かりますね。  
 <img width="204" alt="スクリーンショット 2018-08-14 14 42 20" src="https://user-images.githubusercontent.com/16487150/101100615-2ac41b00-360a-11eb-9c32-7c4e73d1f7c8.png">
 
+---
 ・同じようなやり方で数値も読み込み  
 　数値の場合は閾値調整後OCRで綺麗に読み込む事が可能です。  
 <img width="500" alt="スクリーンショット 2018-08-08 5 04 32" src="https://user-images.githubusercontent.com/16487150/101100238-7f1acb00-3609-11eb-8f4a-a6be1ca0ed1c.png">  
 
+---
 ・Googleスプレッドシートに記録  
 　今まで取得した情報をスプレッドシートに記入します。  
 　これの自動化によってとても管理が楽になりました。  
 <img width="500" alt="スクリーンショット 2018-08-13 0 18 38" src="https://user-images.githubusercontent.com/16487150/101100354-b4bfb400-3609-11eb-9469-b70123d65820.png">
 
-
+---
 
 
 ## LICENCE
