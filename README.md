@@ -15,8 +15,8 @@ SHINoALICE_Colosseum
 ・Twitterに投稿した際の動画です  
 　有難い事に沢山のいいね・リツイートを頂きました。  
  
- (This is a video of the post on Twitter  
-　Thankfully, we got a lot of likes and retweets. )  
+ (・This is a video of the post on Twitter  
+　　Thankfully, we got a lot of likes and retweets. )  
 https://twitter.com/rem_rem0/status/1028866263018131456?s=20
 
 
